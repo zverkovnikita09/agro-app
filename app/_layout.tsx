@@ -1,39 +1,45 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import { store, persistor } from "@app/store";
+import { Notifications } from "@entities/Notifications";
+import { COLORS } from "@shared/lib/styles";
+import { useFonts } from "expo-font";
+import { Slot } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, View } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
-
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+export default function Layout() {
+  const [loaded, error] = useFonts({
+    Gilroy: require("@fonts/Gilroy-Regular.ttf"),
+    GilroyBold: require("@fonts/Gilroy-Bold.ttf"),
+    GilroyMedium: require("@fonts/Gilroy-Medium.ttf"),
+    GilroySemiBold: require("@fonts/Gilroy-SemiBold.ttf"),
+    GilroyThin: require("@fonts/Gilroy-Thin.ttf"),
   });
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
+  if (!loaded || error) return null;
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <SafeAreaProvider>
+          <Notifications />
+          <StatusBar style="auto" />
+          <View style={styles.container}>
+            <Slot />
+          </View>
+        </SafeAreaProvider>
+      </PersistGate>
+    </Provider>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.white,
+    position: "relative",
+    zIndex: 0,
+  },
+});
