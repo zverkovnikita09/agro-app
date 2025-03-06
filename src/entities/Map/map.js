@@ -1,3 +1,4 @@
+export const map = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,3 +36,4 @@
   <div id="YMapsID" style="width: 100vw; height: 100vh;"></div>
 </body>
 </html>
+`

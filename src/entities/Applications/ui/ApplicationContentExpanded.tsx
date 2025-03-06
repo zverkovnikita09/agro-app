@@ -12,6 +12,8 @@ import { useAppDispatch } from "@app/store";
 import { useCreateOfferMutation } from "../model/Applications.api";
 import { Link } from "expo-router";
 import { Grid } from "@shared/ui/Grid";
+import { Routes } from "@shared/lib/constants";
+import { useState } from "react";
 
 export const ApplicationContentExpanded = ({
   order_number,
@@ -25,9 +27,20 @@ export const ApplicationContentExpanded = ({
   view_counter,
   load_place_name,
   unload_place_name,
-}: Application) => {
+  toggleIsExpanded,
+}: Application & { toggleIsExpanded: () => void }) => {
   const [createOrder, { isLoading, isSuccess }] = useCreateOfferMutation();
   const dispatch = useAppDispatch();
+
+  const [isExpandFocused, setIsExpandFocused] = useState(false);
+
+  const onExpandPressIn = () => {
+    setIsExpandFocused(true);
+  };
+
+  const onExpandPressOut = () => {
+    setIsExpandFocused(false);
+  };
 
   const onSubmit = async () => {
     try {
@@ -56,6 +69,31 @@ export const ApplicationContentExpanded = ({
   };
   return (
     <View style={styles.wrapper}>
+      <Button
+        onPressIn={onExpandPressIn}
+        onPressOut={onExpandPressOut}
+        onPress={toggleIsExpanded}
+        style={{
+          height: 30,
+          position: "absolute",
+          width: "50%",
+          left: "50%",
+          transform: [{ translateX: "-45%" }],
+        }}
+      >
+        <View
+          style={{
+            backgroundColor: isExpandFocused ? COLORS.primaryYellow : "#CCCECF",
+            position: "absolute",
+            top: 2,
+            height: 4,
+            width: 32,
+            borderRadius: 2,
+            left: "50%",
+            transform: [{ translateX: "-50%" }],
+          }}
+        />
+      </Button>
       <View style={{ gap: 6 }}>
         <View style={styles.title}>
           <Title fontSize={18}>Заявка №{order_number}</Title>
@@ -79,7 +117,7 @@ export const ApplicationContentExpanded = ({
         </ApplicationProp>
       </Grid>
       <View style={styles.buttons}>
-        <Link href={`/main/application/${id}`} asChild>
+        <Link href={Routes.application(id)} asChild>
           <Button theme={ButtonTheme.OUTLINE} size={ButtonSize.S}>
             Подробнее
           </Button>

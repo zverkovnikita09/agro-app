@@ -39,6 +39,7 @@ export const InfoBlock = ({
       {additionalText && (
         <GilroyText
           fontSize={14}
+          fontWeight="medium"
           style={[{ textAlign: "center" }, style?.additionalText]}
         >
           {additionalText}

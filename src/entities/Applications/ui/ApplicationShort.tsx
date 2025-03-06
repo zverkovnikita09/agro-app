@@ -12,6 +12,7 @@ import { useCreateOfferMutation } from "../model/Applications.api";
 import { useAppDispatch } from "@app/store";
 import { addNotification, NotificationType } from "@entities/Notifications";
 import { ApplicationProp } from "./ApplicationProp";
+import { Routes } from "@shared/lib/constants";
 
 export const ApplicationShort = ({
   order_number,
@@ -93,7 +94,7 @@ export const ApplicationShort = ({
       </View>
       <ViewsCounter views={view_counter} />
       <View style={{ gap: 8 }}>
-        <Link href={`/main/application/${id}`} asChild>
+        <Link href={Routes.application(id)} asChild>
           <Button theme={ButtonTheme.OUTLINE} size={ButtonSize.M}>
             Подробнее
           </Button>

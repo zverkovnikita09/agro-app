@@ -1,11 +1,10 @@
 import { StyleSheet, View } from "react-native";
-import { Application } from "../model/Applications.model";
-import { Button, ButtonSize, ButtonTheme } from "@shared/ui/Button";
+import { Button } from "@shared/ui/Button";
 import { COLORS } from "@shared/lib/styles";
 import { Title } from "@shared/ui/Title";
 import { GilroyText } from "@shared/ui/GilroyText";
-import { ViewsCounter } from "@shared/ui/ViewsCounter";
-import { TrailBlock } from "@shared/ui/TrailBlock";
+import { Application } from "../model/Applications.model";
+import { useState } from "react";
 
 export const ApplicationContent = ({
   order_number,
@@ -13,8 +12,34 @@ export const ApplicationContent = ({
   unload_place_name,
   toggleIsExpanded,
 }: Application & { toggleIsExpanded: () => void }) => {
+  const [isExpandFocused, setIsExpandFocused] = useState(false);
+
+  const onExpandPressIn = () => {
+    setIsExpandFocused(true);
+  };
+
+  const onExpandPressOut = () => {
+    setIsExpandFocused(false);
+  };
   return (
-    <Button style={styles.wrapper} onPress={toggleIsExpanded}>
+    <Button
+      style={styles.wrapper}
+      onPress={toggleIsExpanded}
+      onPressIn={onExpandPressIn}
+      onPressOut={onExpandPressOut}
+    >
+      <View
+        style={{
+          backgroundColor: isExpandFocused ? COLORS.primaryYellow : "#CCCECF",
+          position: "absolute",
+          top: 2,
+          height: 4,
+          width: 32,
+          borderRadius: 2,
+          left: "50%",
+          transform: [{ translateX: "-30%" }],
+        }}
+      />
       <View style={styles.title}>
         <Title fontSize={15}>Заявка №{order_number}</Title>
       </View>

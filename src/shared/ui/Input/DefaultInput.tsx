@@ -1,28 +1,31 @@
 import { COLORS } from "@shared/lib/styles";
-import { forwardRef, useImperativeHandle, useRef } from "react";
+import { forwardRef } from "react";
 import { StyleSheet, TextInput } from "react-native";
-import { ErrorText } from "../ErrorText";
 import { MainInputProps } from ".";
 
 export const DefaultInput = forwardRef<TextInput, MainInputProps>(
-  ({ style, error, onChangeText, ...props }, ref) => {
-    const inputRef = useRef<TextInput>(null);
-    useImperativeHandle(ref, () => inputRef.current!, []);
-
+  ({ style, error, onChangeText, disabled, ...props }, ref) => {
     return (
       <>
         <TextInput
-          ref={inputRef}
+          ref={ref}
+          editable={!disabled}
           {...props}
           style={[
             styles.input,
-            { borderColor: error ? COLORS.error : COLORS.blackText },
+            {
+              borderColor: error
+                ? COLORS.error
+                : disabled
+                ? COLORS.blackGrey
+                : COLORS.blackText,
+              color: disabled ? COLORS.blackGrey : COLORS.blackText,
+            },
             style,
           ]}
           selectionColor={COLORS.blackText}
           onChangeText={onChangeText}
         />
-        {error && <ErrorText style={styles.error}>{error}</ErrorText>}
       </>
     );
   }

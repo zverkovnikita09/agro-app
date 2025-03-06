@@ -27,9 +27,10 @@ export const TextFieldModal = ({
     >
       <View
         style={{
+          flex: 1,
           paddingTop: insets.top,
           paddingBottom: insets.bottom,
-          paddingHorizontal: 12,
+          paddingHorizontal: 16,
         }}
       >
         <View

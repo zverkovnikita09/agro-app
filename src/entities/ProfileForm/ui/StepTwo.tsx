@@ -1,14 +1,9 @@
 import { StyleSheet, View } from "react-native";
-import {
-  DadataCompany,
-  DadataResponse,
-  useSearchByDadata,
-} from "@shared/hooks/useSearchByDadata";
+import { DadataFMS, useSearchByDadata } from "@shared/hooks/useSearchByDadata";
 import { useEffect, useState } from "react";
 import { Title } from "@shared/ui/Title";
 import { Input } from "@shared/ui/Input";
 import { Controller, useFormContext } from "react-hook-form";
-import { UserInfo } from "@entities/User";
 import {
   DATE_MASK,
   NUMBER_MASK,
@@ -16,18 +11,27 @@ import {
   SNILS_MASK,
 } from "@shared/lib/masks";
 import { EMAIL_REGEXP, MASK_REGEXP } from "@shared/lib/validation";
+import { Select, SelectOptions } from "@shared/ui/Select";
+import { GENDER_OPTIONS, ProfileForm } from "../model/ProfileForm.model";
 
 export const StepTwo = () => {
-  const { setValue, control, watch } = useFormContext<UserInfo>();
+  const { setValue, control, watch } = useFormContext<ProfileForm>();
 
-  const [department, setDepartment] =
-    useState<DadataResponse<DadataCompany> | null>(null);
+  const [department, setDepartment] = useState<DadataFMS | null>(null);
+
+  const [searchDepartment, { isLoading: isDepartmentLoading }] =
+    useSearchByDadata<DadataFMS>("fms_unit");
+
+  const departmentCode = watch("department_code");
 
   const companyType = watch("type");
   const isOOO = companyType === "ООО";
 
-  const [searchCompany, { isLoading: isCompanyLoading }] =
-    useSearchByDadata<DadataCompany>("party");
+  useEffect(() => {
+    if (!department) return;
+    setValue("department_code", department.code ?? "");
+    setValue("department", department.name ?? "");
+  }, [department]);
 
   return (
     <>
@@ -38,6 +42,7 @@ export const StepTwo = () => {
         <Controller
           control={control}
           name="series"
+          rules={{ required: "Поле обязательно к заполнению" }}
           render={({
             formState: { errors },
             field: { value, onChange, name },
@@ -50,12 +55,15 @@ export const StepTwo = () => {
               onChangeText={onChange}
               value={value}
               maxLength={SERIE_MASK.length}
+              isModal
+              error={errors[name]?.message}
             />
           )}
         />
         <Controller
           control={control}
           name="number"
+          rules={{ required: "Поле обязательно к заполнению" }}
           render={({
             formState: { errors },
             field: { value, onChange, name },
@@ -68,27 +76,36 @@ export const StepTwo = () => {
               onChangeText={onChange}
               value={value}
               maxLength={NUMBER_MASK.length}
+              isModal
+              error={errors[name]?.message}
             />
           )}
         />
-        {/* <Controller
+        <Controller
+          rules={{ required: "Поле обязательно к заполнению" }}
           control={control}
-          name="number"
-          render={({
-            formState: { errors },
-            field: { value, onChange, name },
-          }) => (
-            <Input
-              type="label"
-              mask={NUMBER_MASK}
-              label="Номер паспорта"
-              keyboardType="number-pad"
-              onChangeText={onChange}
-              value={value}
-              maxLength={NUMBER_MASK.length}
-            />
+          name="department_code"
+          render={({ field: { name }, formState: { errors } }) => (
+            <Select
+              type="async"
+              label="Код подразделения"
+              inputKeyboard="number-pad"
+              onSearch={searchDepartment}
+              value={departmentCode ?? ""}
+              setValue={(item) => setDepartment(item?.data ?? null)}
+              error={errors[name]?.message}
+            >
+              {(items, onSelect) => (
+                <SelectOptions
+                  options={items}
+                  keyExtractor={(item) => `${item.data.code}${item.data.name}`}
+                  optionText={(item) => item.value}
+                  onSelect={onSelect}
+                />
+              )}
+            </Select>
           )}
-        /> */}
+        />
         <Controller
           control={control}
           name="issue_date_at"
@@ -125,15 +142,15 @@ export const StepTwo = () => {
               onChangeText={onChange}
               value={value}
               maxLength={DATE_MASK.length}
+              isModal
+              error={errors[name]?.message}
             />
           )}
         />
         <Controller
           control={control}
           name="department"
-          rules={{
-            required: "",
-          }}
+          rules={{ required: "Поле обязательно к заполнению" }}
           render={({
             formState: { errors },
             field: { value, onChange, name },
@@ -143,6 +160,9 @@ export const StepTwo = () => {
               label="Кем выдан"
               onChangeText={onChange}
               value={value}
+              multiline
+              isModal
+              error={errors[name]?.message}
             />
           )}
         />
@@ -168,6 +188,8 @@ export const StepTwo = () => {
               value={value}
               keyboardType="number-pad"
               maxLength={SNILS_MASK.length}
+              isModal
+              error={errors[name]?.message}
             />
           )}
         />
@@ -186,6 +208,8 @@ export const StepTwo = () => {
               label="Имя"
               onChangeText={onChange}
               value={value}
+              isModal
+              error={errors[name]?.message}
             />
           )}
         />
@@ -204,6 +228,8 @@ export const StepTwo = () => {
               label="Фамилия"
               onChangeText={onChange}
               value={value}
+              isModal
+              error={errors[name]?.message}
             />
           )}
         />
@@ -222,6 +248,8 @@ export const StepTwo = () => {
               label="Отчество"
               onChangeText={onChange}
               value={value}
+              isModal
+              error={errors[name]?.message}
             />
           )}
         />
@@ -259,7 +287,37 @@ export const StepTwo = () => {
               onChangeText={onChange}
               value={value}
               maxLength={DATE_MASK.length}
+              isModal
+              error={errors[name]?.message}
             />
+          )}
+        />
+        <Controller
+          control={control}
+          name="gender"
+          render={({
+            formState: { errors },
+            field: { value, onChange, name },
+          }) => (
+            <Select
+              setValue={(item) => onChange(item)}
+              value={value.name}
+              label="Пол"
+              options={GENDER_OPTIONS}
+              isModal
+              error={errors[name]?.message}
+            >
+              {(items, onSelect) => (
+                <SelectOptions
+                  noPadding
+                  options={items}
+                  selectedOption={(item) => item.value === value.value}
+                  keyExtractor={(item) => item.name}
+                  optionText={(item) => item.name}
+                  onSelect={onSelect}
+                />
+              )}
+            </Select>
           )}
         />
         <Controller
@@ -282,6 +340,8 @@ export const StepTwo = () => {
               onChangeText={onChange}
               value={value}
               keyboardType="email-address"
+              isModal
+              error={errors[name]?.message}
             />
           )}
         />
@@ -309,6 +369,8 @@ export const StepTwo = () => {
                 onChangeText={onChange}
                 value={value}
                 maxLength={12}
+                isModal
+                error={errors[name]?.message}
               />
             )}
           />

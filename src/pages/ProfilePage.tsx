@@ -1,7 +1,6 @@
-import { useAppDispatch } from "@app/store";
 import { ApplicationInfoItem } from "@entities/Applications";
-import { User } from "@entities/User";
-import { useGetUserDataQuery } from "@entities/User/model/User.api";
+import { INVALID_DOCUMENTS } from "@entities/ProfileForm";
+import { useGetUserDataQuery } from "@entities/User";
 import { formatSnils } from "@shared/lib/formatSnils";
 import { CardContainer } from "@shared/ui/CardContainer";
 import { Document } from "@shared/ui/Document";
@@ -9,8 +8,12 @@ import { Grid } from "@shared/ui/Grid";
 import { Title } from "@shared/ui/Title";
 import { StyleSheet, View } from "react-native";
 
-export const ProfilePage = ({ id }: { id: string }) => {
-  const { data: userInfo, isLoading, isError } = useGetUserDataQuery();
+export const ProfilePage = () => {
+  const { data: userInfo } = useGetUserDataQuery();
+
+  const userDocs = userInfo?.files?.filter(
+    (file) => !INVALID_DOCUMENTS.includes(file.type)
+  );
 
   return (
     <>
@@ -39,18 +42,20 @@ export const ProfilePage = ({ id }: { id: string }) => {
           </ApplicationInfoItem>
         </View>
       </CardContainer>
-      <Title fontSize={16} fontWeight="bold" style={{ marginTop: 24 }}>
-        Документы
-      </Title>
-      <Grid style={styles.docs} gap={12}>
-        <Document>BA</Document>
-        <Document>BABABB</Document>
-        <Document>BA</Document>
-        <Document>Fsgsfg</Document>
-        <Document>FASfafasf</Document>
-        <Document>MKLKL</Document>
-        <Document>asdsadsa</Document>
-      </Grid>
+      {!!userDocs?.length && (
+        <CardContainer style={styles.cardContainer}>
+          <Title fontSize={16} fontWeight="bold">
+            Документы
+          </Title>
+          <Grid style={styles.docs} gap={12}>
+            {userDocs.map((file) => (
+              <Document key={file.type} url={file.path_url}>
+                {file.type}
+              </Document>
+            ))}
+          </Grid>
+        </CardContainer>
+      )}
       <CardContainer style={styles.cardContainer}>
         <Title fontSize={16} fontWeight="bold">
           Информация

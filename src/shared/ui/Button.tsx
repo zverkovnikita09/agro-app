@@ -61,6 +61,7 @@ export interface ButtonProps extends PressableProps {
   color?: Color;
   withConfirm?: boolean;
   confirmProps?: Omit<ConfirmPopupProps, "onClose" | "isOpen">;
+  fontSize?: GilroyTextProps["fontSize"];
 }
 
 export const Button = forwardRef<View, ButtonProps>(
@@ -82,6 +83,7 @@ export const Button = forwardRef<View, ButtonProps>(
       onPress,
       withConfirm,
       confirmProps,
+      fontSize,
       ...props
     },
     ref
@@ -147,7 +149,7 @@ export const Button = forwardRef<View, ButtonProps>(
     const Content =
       typeof children === "string" ? (
         <GilroyText
-          fontSize={sizeStyles.fontSize}
+          fontSize={fontSize || sizeStyles.fontSize}
           color={color || themeStyles?.color}
           style={textStyle}
           fontWeight={fontWeight}
@@ -174,6 +176,8 @@ export const Button = forwardRef<View, ButtonProps>(
           <ConfirmPopup
             isOpen={isConfirmOpen}
             onClose={closeConfirm}
+            //@ts-ignore
+            onConfirm={() => onPress?.()}
             {...confirmProps}
           />
         )}
@@ -187,6 +191,7 @@ export const Button = forwardRef<View, ButtonProps>(
               backgroundColor: getButtonColor({
                 styles: themeStyles,
                 isClicked,
+                disabled,
               }),
             },
             sizeStyles,

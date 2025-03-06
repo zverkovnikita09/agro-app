@@ -25,6 +25,7 @@ interface SelectWithSearchProps<T> {
     setSelectValue: (value: T extends Array<any> ? T[number] : T) => void
   ) => JSX.Element;
   searchByKey?: keyof T;
+  error?: string;
 }
 
 export const SelectWithSearch = <T,>({
@@ -37,6 +38,7 @@ export const SelectWithSearch = <T,>({
   options,
   isModal = true,
   searchByKey,
+  error,
 }: SelectWithSearchProps<T>) => {
   const [inputValue, setInputValue] = useState("");
 
@@ -50,7 +52,7 @@ export const SelectWithSearch = <T,>({
     return options?.filter((item) =>
       typeof item === "string" ? item.includes(inputValue) : item
     );
-  }, [inputValue]);
+  }, [inputValue, options]);
 
   const [isFocused, setIsFocused] = useState(false);
   const [isModalOpen, openModal, closeModal] = useModalState(false);
@@ -110,6 +112,7 @@ export const SelectWithSearch = <T,>({
             label={label}
             value={value}
             multiline={true}
+            error={error}
           />
         </Pressable>
       </>

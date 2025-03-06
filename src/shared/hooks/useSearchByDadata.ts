@@ -31,6 +31,12 @@ export interface DadataAddress {
   region: string
 }
 
+export interface DadataFMS {
+  code: string;
+  name: string;
+  region_code: string;
+}
+
 export const useSearchByDadata = <T,>(target: "address" | "party" | "fms_unit") =>{
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);

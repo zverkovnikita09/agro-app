@@ -1,14 +1,13 @@
-import { Animated, Modal, StyleSheet, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { StyleSheet, View } from "react-native";
 import { COLORS, SHADOWS } from "@shared/lib/styles";
 import { Button, ButtonSize, ButtonTheme } from "./Button";
 import { Grid } from "./Grid";
-import { CloseButton } from "./CloseButton";
 import { InfoBlock } from "./InfoBlock";
 import { InfoCircleIcon } from "@images/svg/InfoCircleIcon";
+import { Popup } from "./Popup";
 
 export interface ConfirmPopupProps {
-  onClose?: () => void;
+  onClose: () => void;
   isOpen?: boolean;
   onConfirm?: () => void;
   onCancel?: () => void;
@@ -18,6 +17,9 @@ export interface ConfirmPopupProps {
     confirm?: ButtonTheme;
     cancel?: ButtonTheme;
   };
+  hideConfirm?: boolean;
+  confrimText?: string;
+  cancelText?: string;
 }
 
 export const ConfirmPopup = ({
@@ -26,59 +28,52 @@ export const ConfirmPopup = ({
   onCancel,
   onConfirm,
   additionalText,
+  hideConfirm,
   title = "Подтвердите действие",
+  buttonThemes,
+  cancelText = "Вернуться",
+  confrimText = "Очистить",
 }: ConfirmPopupProps) => {
-  const insets = useSafeAreaInsets();
-  const opacity = new Animated.Value(0);
-  const transformY = new Animated.Value(-100);
-
-  const closePopup = () => {
-    onClose?.();
+  const handleCancel = () => {
+    onClose();
+    onCancel?.();
   };
 
   return (
-    <Modal
-      animationType="none"
-      visible={isOpen}
-      onRequestClose={closePopup}
-      transparent={true}
-      statusBarTranslucent
-    >
-      <View
-        style={[
-          styles.overlay,
-          { paddingTop: insets.top, paddingBottom: insets.bottom },
-        ]}
+    <Popup closePopup={onClose} isOpen={isOpen}>
+      <InfoBlock
+        title={title}
+        style={{
+          main: styles.container,
+          additionalText: styles.additionalText,
+        }}
+        additionalText={additionalText}
+        icon={<InfoCircleIcon width={46} height={46} />}
       >
-        <InfoBlock
-          title={title}
-          style={{
-            main: styles.container,
-            additionalText: styles.additionalText,
-          }}
-          additionalText={additionalText}
-          icon={<InfoCircleIcon width={46} height={46} />}
+        <View
+          style={{ width: "100%", marginTop: 16, flexDirection: "row", gap: 8 }}
         >
-          <CloseButton style={styles.close} onPress={closePopup} />
-          <Grid gap={8} style={{ width: "100%", marginTop: 16 }}>
+          {!hideConfirm && (
             <Button
               theme={ButtonTheme.OUTLINE}
               size={ButtonSize.M}
               onPress={onConfirm}
+              style={{ flex: 1 }}
             >
-              Очистить
+              {confrimText}
             </Button>
-            <Button
-              onPress={onCancel}
-              theme={ButtonTheme.ACCENT_WITH_BLACK_TEXT}
-              size={ButtonSize.M}
-            >
-              Вернуться
-            </Button>
-          </Grid>
-        </InfoBlock>
-      </View>
-    </Modal>
+          )}
+          <Button
+            onPress={handleCancel}
+            theme={ButtonTheme.ACCENT_WITH_BLACK_TEXT}
+            size={ButtonSize.M}
+            style={{ flex: 1 }}
+          >
+            {cancelText}
+          </Button>
+        </View>
+      </InfoBlock>
+    </Popup>
   );
 };
 const styles = StyleSheet.create({
@@ -98,10 +93,5 @@ const styles = StyleSheet.create({
   },
   additionalText: {
     color: COLORS.blackGrey,
-  },
-  close: {
-    position: "absolute",
-    top: 15,
-    right: 15,
   },
 });

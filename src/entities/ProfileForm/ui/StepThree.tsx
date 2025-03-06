@@ -1,12 +1,44 @@
 import { StyleSheet, View } from "react-native";
 import { Title } from "@shared/ui/Title";
 import { useFormContext } from "react-hook-form";
-import { UserInfo } from "@entities/User";
 import { FilePicker } from "@shared/ui/FilePicker";
 import { DocPicker } from "./DocPicker";
+import { FilesToSendType, ProfileForm } from "../model/ProfileForm.model";
+import { DocumentPickerAsset } from "expo-document-picker";
+
+const FILE_NAMES = ["Реквизиты", "ПСФЛ", "ЕФС", "Патент", "УСН", "НДС"];
 
 export const StepThree = () => {
-  const { setValue, control, watch } = useFormContext<UserInfo>();
+  const { setValue, control, watch } = useFormContext<ProfileForm>();
+
+  const files = watch("files");
+
+  const handleFilesChange = (
+    name: string,
+    file: DocumentPickerAsset | null
+  ) => {
+    if (!file) return;
+
+    const existingFile = files?.find((item) => item.file_type === name);
+
+    const newFiles: FilesToSendType[] =
+      files
+        ?.filter((item) => item.file_type !== existingFile?.file_type)
+        .concat([
+          {
+            file_type: name,
+            file: { name: file.name, type: file.mimeType ?? "", uri: file.uri },
+            file_id: existingFile?.file_id,
+          },
+        ]) ?? [];
+
+    setValue("files", newFiles);
+  };
+
+  const handleFileDelete = (name: string) => {
+    const newFiles = files?.filter((item) => item.file_type !== name);
+    setValue("files", newFiles);
+  };
 
   return (
     <>
@@ -14,57 +46,27 @@ export const StepThree = () => {
         Документы
       </Title>
       <View style={styles.inputsContainer}>
-        <FilePicker>
-          {(onDownload) => (
-            <DocPicker
-              onDelete={() => {}}
-              onDownload={onDownload}
-              text="Реквизиты"
-            />
-          )}
-        </FilePicker>
-        <FilePicker>
-          {(onDownload) => (
-            <DocPicker
-              onDelete={() => {}}
-              onDownload={onDownload}
-              text="ПСФЛ"
-            />
-          )}
-        </FilePicker>
-        <FilePicker>
-          {(onDownload) => (
-            <DocPicker onDelete={() => {}} onDownload={onDownload} text="ЕФС" />
-          )}
-        </FilePicker>
-        <FilePicker>
-          {(onDownload) => (
-            <DocPicker
-              onDelete={() => {}}
-              onDownload={onDownload}
-              text="Налоговая тайна"
-            />
-          )}
-        </FilePicker>
-        <FilePicker>
-          {(onDownload) => (
-            <DocPicker
-              onDelete={() => {}}
-              onDownload={onDownload}
-              text="Патент"
-            />
-          )}
-        </FilePicker>
-        <FilePicker>
-          {(onDownload) => (
-            <DocPicker onDelete={() => {}} onDownload={onDownload} text="УСН" />
-          )}
-        </FilePicker>
-        <FilePicker>
-          {(onDownload) => (
-            <DocPicker onDelete={() => {}} onDownload={onDownload} text="НДС" />
-          )}
-        </FilePicker>
+        {FILE_NAMES.map((item) => (
+          <FilePicker
+            key={item}
+            onPress={(file) => handleFilesChange(item, file)}
+            type={[
+              "image/*",
+              "application/pdf",
+              "application/msword",
+              "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            ]}
+          >
+            {(onDownload) => (
+              <DocPicker
+                hasImage={!!files?.find((file) => file.file_type === item)}
+                onDelete={() => handleFileDelete(item)}
+                onDownload={onDownload}
+                text={item}
+              />
+            )}
+          </FilePicker>
+        ))}
       </View>
     </>
   );

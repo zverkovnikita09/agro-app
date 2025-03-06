@@ -5,6 +5,7 @@ import {
   setSelectedApplication,
   useGetApplicationsQuery,
 } from "@entities/Applications";
+import { FiltersLink, FiltersSelectors } from "@widgets/Filters";
 import {
   changeMarksColor,
   clearRoute,
@@ -12,6 +13,7 @@ import {
   renderRoute,
   setMapCenter,
 } from "@entities/Map";
+import { map } from "@entities/Map/map";
 import { COLORS } from "@shared/lib/styles";
 import { LoadingBlock } from "@shared/ui/LoadingBlock";
 import { useEffect, useRef, useState } from "react";
@@ -23,13 +25,14 @@ export default function Main() {
   const [isMapLoading, setIsMapLoading] = useState(true);
   const [isRouteCreating, setIsRouteCreating] = useState(false);
   const mapCenter = useSelector(ApplicationsSelectors.selectMapCenter);
+  const filters = useSelector(FiltersSelectors.selectFilters);
 
   const {
     isLoading: isApplicationsLoading,
     isError: isApplicationsError,
     data: applications,
     refetch,
-  } = useGetApplicationsQuery();
+  } = useGetApplicationsQuery({ filters });
   const dispatch = useAppDispatch();
 
   const selectedApplications = useSelector(
@@ -98,11 +101,14 @@ export default function Main() {
           }
         />
       )}
+      <FiltersLink
+        style={{ position: "absolute", top: 14, left: 8, zIndex: 1 }}
+      />
       <WebView
         style={{ flex: 1 }}
         originWhitelist={["*"]}
         ref={webViewRef}
-        source={require("@entities/Map/map.html")}
+        source={{ html: map }}
         onMessage={(event) => {
           if (event.nativeEvent.data === "load") {
             setIsMapLoading(false);

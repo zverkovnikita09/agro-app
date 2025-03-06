@@ -1,25 +1,24 @@
-import { View, ViewProps } from "react-native";
-import { GilroyText } from "./GilroyText";
 import { PropsWithChildren } from "react";
-import { Button } from "./Button";
-import { ErrorText } from "./ErrorText";
+import { CheckBoxProps, ControlCheckBoxStatus } from ".";
+import { Button } from "../Button";
+import { View, ViewProps } from "react-native";
 import { COLORS } from "@shared/lib/styles";
+import { GilroyText } from "../GilroyText";
 import { CheckBoxIcon } from "@images/svg/CheckBoxIcon";
+import { MinusIcon } from "@images/svg/MinusIcon";
 
-interface CheckBoxProps {
+interface ControlCheckBoxProps {
+  status: ControlCheckBoxStatus;
   onChange?: () => void;
-  isChecked?: boolean;
-  error?: string;
   style?: ViewProps["style"];
 }
 
-export const CheckBox = ({
-  isChecked,
+export const ControlCheckBox = ({
   children,
-  error,
   onChange,
   style,
-}: PropsWithChildren<CheckBoxProps>) => {
+  status,
+}: PropsWithChildren<ControlCheckBoxProps>) => {
   return (
     <>
       <Button
@@ -44,14 +43,15 @@ export const CheckBox = ({
             borderWidth: 1,
             borderColor: COLORS.blackText,
             borderRadius: 6,
-            backgroundColor: isChecked ? COLORS.primaryYellow : COLORS.white,
+            backgroundColor:
+              status === "none" ? COLORS.white : COLORS.primaryYellow,
           }}
         >
-          {isChecked && <CheckBoxIcon />}
+          {status === "all" && <CheckBoxIcon width={11} height={8} />}
+          {status === "some" && <MinusIcon width={10} height={2} />}
         </View>
         <GilroyText>{children}</GilroyText>
       </Button>
-      {error && <ErrorText>{error}</ErrorText>}
     </>
   );
 };

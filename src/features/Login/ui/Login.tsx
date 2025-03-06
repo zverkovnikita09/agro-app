@@ -1,7 +1,6 @@
 import { useAppDispatch } from "@app/store";
-import { setRefetchCodeTime, setUserPhone } from "@entities/Auth";
+import { setTimeOfLogin, setUserPhone, useLoginMutation } from "@entities/Auth";
 import { addNotification, NotificationType } from "@entities/Notifications";
-import { useLoginMutation } from "@entities/User/model/User.api";
 import { PHONE_MASK } from "@shared/lib/masks";
 import { Button, ButtonSize, ButtonTheme } from "@shared/ui/Button";
 import { GilroyText } from "@shared/ui/GilroyText";
@@ -31,8 +30,16 @@ export const Login = () => {
         );
         return;
       }
-      dispatch(setRefetchCodeTime(60));
+      dispatch(setTimeOfLogin(new Date().getTime()));
       dispatch(setUserPhone(phoneNumber));
+      // dispatch(
+      //   addNotification({
+      //     type: NotificationType.SUCCESS,
+      //     id: performance.now().toString(),
+      //     message: response.data.user.code,
+      //     timeout: 10000,
+      //   })
+      // );
     } catch (e) {
       console.log(e);
     }

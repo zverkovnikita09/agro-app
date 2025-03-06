@@ -10,6 +10,8 @@ interface SelectOption<T extends unknown[]> {
   optionText: (item: T[number]) => string;
   onSelect?: (item: T[number]) => void;
   noElementsText?: string;
+  noPadding?: boolean;
+  selectedOption?: (item: T[number]) => boolean;
 }
 
 export const SelectOptions = <T extends unknown[]>({
@@ -18,6 +20,8 @@ export const SelectOptions = <T extends unknown[]>({
   optionText,
   onSelect,
   noElementsText,
+  noPadding,
+  selectedOption,
 }: SelectOption<T>) => {
   const [clickedItem, setClickedItem] = useState(-1);
 
@@ -31,13 +35,15 @@ export const SelectOptions = <T extends unknown[]>({
     return (
       <Button
         fontWeight="regular"
-        size={ButtonSize.S}
+        fontSize={14}
         onPressIn={() => setClickedItem(index)}
         onPressOut={() => setClickedItem(-1)}
         onPress={() => onSelect?.(item)}
         textStyle={{
           color:
-            clickedItem === index ? COLORS.primaryYellow : COLORS.blackText,
+            clickedItem === index || selectedOption?.(item)
+              ? COLORS.primaryYellow
+              : COLORS.blackText,
         }}
         style={[
           styles.option,
@@ -61,7 +67,10 @@ export const SelectOptions = <T extends unknown[]>({
 
   return (
     <FlatList
-      style={{ paddingHorizontal: 8, marginTop: 12 }}
+      style={{
+        paddingHorizontal: noPadding ? 0 : 8,
+        marginTop: noPadding ? 0 : 12,
+      }}
       data={options}
       keyExtractor={keyExtractor}
       renderItem={renderOptions}

@@ -29,26 +29,31 @@ export const InputWithLabel = forwardRef<TextInput, InputWithLabelProps>(
       onFocus,
       onBlur,
       value,
-      onChange,
       mask,
       ...props
     },
     ref
   ) => {
     const [fixedLabel, setFixedLabel] = useState(false);
+    const [isFocused, setIsFocused] = useState(false);
 
     const onInputFocus = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
       setFixedLabel(true);
+      setIsFocused(true);
       onFocus?.(e);
     };
 
     const onInputBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
       setFixedLabel(!!value);
+      setIsFocused(false);
       onBlur?.(e);
     };
 
     useEffect(() => {
-      if (!value) return;
+      if (!value && !isFocused) {
+        setFixedLabel(false);
+        return;
+      }
       setFixedLabel(true);
     }, [value]);
 
@@ -88,20 +93,17 @@ export const InputWithLabel = forwardRef<TextInput, InputWithLabelProps>(
           />
         ) : (
           <DefaultInput
-            editable={!disabled}
             value={value}
-            onChange={onChange}
             placeholder=""
             ref={ref}
             style={[
               {
                 paddingTop: 24,
                 paddingBottom: 6,
-                borderColor: disabled ? COLORS.blackGrey : COLORS.blackText,
-                color: disabled ? COLORS.blackGrey : COLORS.blackText,
               },
               inputStyle,
             ]}
+            disabled={disabled}
             onFocus={onInputFocus}
             onBlur={onInputBlur}
             {...props}

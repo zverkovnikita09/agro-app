@@ -1,18 +1,33 @@
-import { getDocumentAsync } from "expo-document-picker";
-import { useState } from "react";
-import {} from "expo-file-system";
+import { DocumentPickerAsset, getDocumentAsync } from "expo-document-picker";
+import { ReactNode } from "react";
+import { Button } from "./Button";
 
 interface FilePickerProps {
-  children?: (pickFile: () => void) => JSX.Element;
+  children?: ReactNode | ((pickFile: () => void) => JSX.Element);
+  onPress?: (file: DocumentPickerAsset | null) => void;
+  type?: string | string[];
 }
 
-export const FilePicker = ({ children }: FilePickerProps) => {
-  const [file, setFile] = useState(null);
-
+export const FilePicker = ({
+  children,
+  onPress,
+  type = "image/*",
+}: FilePickerProps) => {
   const pickFile = async () => {
-    const result = await getDocumentAsync({ multiple: false });
-    console.log(result.assets);
+    const result = await getDocumentAsync({
+      multiple: false,
+      type,
+      copyToCacheDirectory: true,
+    });
+    if (result.canceled) return;
+    if (result.assets?.[0]) {
+      onPress?.(result.assets[0]);
+    }
   };
 
-  return children?.(pickFile);
+  return typeof children === "function" ? (
+    children(pickFile)
+  ) : (
+    <Button onPress={pickFile}>{children}</Button>
+  );
 };

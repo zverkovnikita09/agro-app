@@ -4,12 +4,14 @@ import { Optional } from "@shared/lib/types";
 import { AsyncSelect } from "./AsyncSelect";
 import { SelectWithSearch } from "./SelectWithSearch";
 import { TextInputProps } from "react-native";
+import { DefaultSelect } from "./DefaultSelect";
 
 export interface MainSelectProps<T> {
   label: string;
   disabled?: boolean;
   inputKeyboard?: TextInputProps["keyboardType"];
   value?: string;
+  error?: string;
   setValue?: (value: T extends Array<any> ? T[number] : T) => void;
 }
 
@@ -62,7 +64,8 @@ export const Select = <T,>({
         return <SelectWithSearch isModal={isModal} {...props} />;
       }
       case "default":
-        return <></>;
+        //@ts-ignore
+        return <DefaultSelect {...props} />;
       default:
         return <></>;
     }

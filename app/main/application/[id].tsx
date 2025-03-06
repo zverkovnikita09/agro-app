@@ -17,7 +17,7 @@ export default function Application() {
   if (isApplicationLoading || isLoadingUserApplications)
     return <LoadingBlock />;
 
-  if (!application || !userApplications?.length) return null;
+  if (!application || !userApplications) return null;
 
   return (
     <ViewApplicationPage

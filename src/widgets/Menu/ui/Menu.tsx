@@ -1,8 +1,9 @@
-import { useGetUserDataQuery } from "@entities/User/model/User.api";
+import { useGetUserDataQuery } from "@entities/User";
 import { ListIcon } from "@images/svg/ListIcon";
 import { MapIcon } from "@images/svg/MapIcon";
 import { ProfileIcon } from "@images/svg/ProfileIcon";
 import { SearchIcon } from "@images/svg/SearchIcon";
+import { Routes } from "@shared/lib/constants";
 import { COLORS, SHADOWS } from "@shared/lib/styles";
 import { Navlink } from "@shared/ui/NavLink";
 import { usePathname } from "expo-router";
@@ -20,11 +21,11 @@ export const Menu = ({ style }: MenuProps) => {
 
   return (
     <View style={[styles.wrapper, style]}>
-      <Navlink href="/main" style={styles.link}>
+      <Navlink href={Routes.main} style={styles.link}>
         <MapIcon width={24} height={24} />
       </Navlink>
       <Navlink
-        href="/main/check-list"
+        href={Routes.checkList}
         style={styles.link}
         activeCondition={
           path.includes("check-list") || path.includes("application")
@@ -32,11 +33,11 @@ export const Menu = ({ style }: MenuProps) => {
       >
         <ListIcon width={24} height={24} />
       </Navlink>
-      <Navlink href="/main/search" style={styles.link}>
+      <Navlink href={Routes.search} style={styles.link}>
         <SearchIcon width={24} height={24} />
       </Navlink>
       <Navlink
-        href={`/main/profile/${data.id}`}
+        href={Routes.profile(data.id)}
         style={styles.link}
         activeCondition={path.includes("profile")}
       >

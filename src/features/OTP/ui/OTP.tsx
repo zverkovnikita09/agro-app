@@ -2,29 +2,29 @@ import { useAppDispatch } from "@app/store";
 import {
   AuthSelectors,
   removeUserPhone,
-  setRefetchCodeTime,
+  setTimeOfLogin,
   setToken,
-} from "@entities/Auth";
-import { addNotification, NotificationType } from "@entities/Notifications";
-import {
   useCodeVerificationMutation,
   useLoginMutation,
-} from "@entities/User/model/User.api";
+} from "@entities/Auth";
+import { addNotification, NotificationType } from "@entities/Notifications";
+import { Routes } from "@shared/lib/constants";
 import { COLORS } from "@shared/lib/styles";
 import { Button, ButtonSize, ButtonTheme } from "@shared/ui/Button";
 import { GilroyText } from "@shared/ui/GilroyText";
 import { OTPInput } from "@shared/ui/OTPInput";
 import { Title } from "@shared/ui/Title";
 import { router } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { useSelector } from "react-redux";
 
 export const OTP = () => {
   const [otp, setOtp] = useState("");
   const phoneNumber = useSelector(AuthSelectors.selectPhoneNumber);
-  const refetchCodeTime = useSelector(AuthSelectors.selectRefetchCodeTime);
+  const timeOfLogin = useSelector(AuthSelectors.selectTimeOfLogin);
   const dispatch = useAppDispatch();
+  const [timeToRefetch, setTimeToRefetch] = useState(0);
 
   const [handleVerification, { isLoading: isVerificationLoading }] =
     useCodeVerificationMutation();
@@ -50,7 +50,7 @@ export const OTP = () => {
       }
       dispatch(setToken(response.data.token));
       dispatch(removeUserPhone());
-      router.navigate("/");
+      router.navigate(Routes.default);
     } catch (e) {
       console.log(e);
     }
@@ -70,19 +70,39 @@ export const OTP = () => {
         );
         return;
       }
-      dispatch(setRefetchCodeTime(60));
+      // dispatch(
+      //   addNotification({
+      //     type: NotificationType.SUCCESS,
+      //     id: performance.now().toString(),
+      //     message: response.data.user.code,
+      //     timeout: 10000,
+      //   })
+      // );
+      dispatch(setTimeOfLogin(new Date().getTime()));
     } catch (e) {
       console.log(e);
     }
   };
 
-  useEffect(() => {
-    if (!refetchCodeTime) return;
+  useLayoutEffect(() => {
+    if (!timeOfLogin) return;
+    if (!timeToRefetch) {
+      setTimeToRefetch(
+        Math.round(60 - (new Date().getTime() - timeOfLogin) / 1000)
+      );
+    }
     const interval = setInterval(() => {
-      dispatch(setRefetchCodeTime(refetchCodeTime - 1));
+      const now = new Date().getTime();
+      const newTime = Math.round(60 - (now - timeOfLogin) / 1000);
+      if (newTime <= 0) {
+        setTimeToRefetch(0);
+        dispatch(setTimeOfLogin(0));
+        clearInterval(interval);
+      }
+      setTimeToRefetch(Math.round(60 - (now - timeOfLogin) / 1000));
     }, 1000);
     return () => clearInterval(interval);
-  }, [refetchCodeTime]);
+  }, [timeOfLogin]);
 
   return (
     <>
@@ -96,10 +116,10 @@ export const OTP = () => {
         style={styles.otpBlock}
         onSubmit={onSubmit}
       />
-      {refetchCodeTime ? (
+      {timeToRefetch ? (
         <GilroyText style={styles.refetchCode}>
           Отправить повторно через 00:
-          {refetchCodeTime < 10 ? `0${refetchCodeTime}` : refetchCodeTime}
+          {timeToRefetch < 10 ? `0${timeToRefetch}` : timeToRefetch}
         </GilroyText>
       ) : (
         <Button

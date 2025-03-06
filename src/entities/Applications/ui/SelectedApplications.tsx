@@ -8,11 +8,14 @@ import { clearSelectedApplication } from "../model/Applications.slice";
 import { COLORS } from "@shared/lib/styles";
 import { ApplicationContent } from "./ApplicationContent";
 import { useEffect, useState } from "react";
+import { FiltersSelectors } from "@widgets/Filters";
 
 export const SelectedApplications = ({ style, ...props }: ViewProps) => {
   const selectedApplications = useSelector(
     ApplicationsSelectors.selectSelectedApplications
   );
+
+  const filters = useSelector(FiltersSelectors.selectFilters);
 
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -21,6 +24,10 @@ export const SelectedApplications = ({ style, ...props }: ViewProps) => {
   useEffect(() => {
     setIsExpanded(false);
   }, [selectedApplications]);
+
+  useEffect(() => {
+    dispatch(clearSelectedApplication());
+  }, [filters]);
 
   if (!selectedApplications.length) return null;
 
@@ -55,7 +62,11 @@ export const SelectedApplications = ({ style, ...props }: ViewProps) => {
         onPress={() => dispatch(clearSelectedApplication())}
       />
       {selectedApplications.map((application) => (
-        <ApplicationContentExpanded {...application} key={application.id} />
+        <ApplicationContentExpanded
+          {...application}
+          key={application.id}
+          toggleIsExpanded={() => setIsExpanded(false)}
+        />
       ))}
     </CardContainer>
   );

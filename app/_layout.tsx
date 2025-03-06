@@ -2,12 +2,15 @@ import { store, persistor } from "@app/store";
 import { Notifications } from "@entities/Notifications";
 import { COLORS } from "@shared/lib/styles";
 import { useFonts } from "expo-font";
-import { Slot } from "expo-router";
+import { Slot, SplashScreen } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
+
+SplashScreen.preventAutoHideAsync();
 
 export default function Layout() {
   const [loaded, error] = useFonts({
@@ -17,6 +20,12 @@ export default function Layout() {
     GilroySemiBold: require("@fonts/Gilroy-SemiBold.ttf"),
     GilroyThin: require("@fonts/Gilroy-Thin.ttf"),
   });
+
+  useEffect(() => {
+    if (loaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded]);
 
   if (!loaded || error) return null;
 

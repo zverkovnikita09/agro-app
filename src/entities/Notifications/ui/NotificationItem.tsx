@@ -76,7 +76,7 @@ export const NotificationItem = ({
         color={NotificationOptions.color}
         style={styles.text}
       >
-        {message}
+        {typeof message === "string" ? message : ""}
       </GilroyText>
     </View>
   );

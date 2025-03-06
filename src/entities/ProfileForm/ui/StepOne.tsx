@@ -13,14 +13,16 @@ import { Select, SelectOptions } from "@shared/ui/Select";
 import { Input } from "@shared/ui/Input";
 import { Controller, useFormContext } from "react-hook-form";
 import { UserInfo } from "@entities/User";
-import { useGetTaxSystemsQuery } from "@entities/User/model/User.api";
 import { PHONE_MASK } from "@shared/lib/masks";
+import { useGetTaxSystemsQuery } from "../model/ProfileForm.api";
+import { ProfileForm } from "../model/ProfileForm.model";
 
 export const StepOne = () => {
   const [addressCheckBox, toggleAddressCheckBox] = useToggleState(true);
-  const { data: taxSystems, isLoading } = useGetTaxSystemsQuery();
+  const { data: taxSystems, isLoading: isTaxSystemLoading } =
+    useGetTaxSystemsQuery();
 
-  const { setValue, control, watch } = useFormContext<UserInfo>();
+  const { setValue, control, watch } = useFormContext<ProfileForm>();
 
   const [company, setCompany] = useState<DadataResponse<DadataCompany> | null>(
     null
@@ -83,29 +85,38 @@ export const StepOne = () => {
 
   const [searchAddress, { isLoading: isAddressLoading }] =
     useSearchByDadata<DadataAddress>("address");
+
   return (
     <>
       <Title fontWeight="bold" fontSize={16} style={{ marginTop: 24 }}>
         Информация о компании
       </Title>
       <View style={styles.inputsContainer}>
-        <Select
-          type="async"
-          label="ИНН"
-          inputKeyboard="number-pad"
-          onSearch={searchCompany}
-          value={cinn ?? ""}
-          setValue={(item) => setCompany(item ?? null)}
-        >
-          {(items, onSelect) => (
-            <SelectOptions
-              options={items}
-              keyExtractor={(item) => item.data.inn ?? item.value}
-              optionText={(item) => item.value}
-              onSelect={onSelect}
-            />
+        <Controller
+          rules={{ required: "Поле обязательно к заполнению" }}
+          control={control}
+          name="cinn"
+          render={({ field: { name }, formState: { errors } }) => (
+            <Select
+              type="async"
+              label="ИНН"
+              inputKeyboard="number-pad"
+              onSearch={searchCompany}
+              value={cinn ?? ""}
+              setValue={(item) => setCompany(item ?? null)}
+              error={errors[name]?.message}
+            >
+              {(items, onSelect) => (
+                <SelectOptions
+                  options={items}
+                  keyExtractor={(item) => item.data.inn ?? item.value}
+                  optionText={(item) => item.value}
+                  onSelect={onSelect}
+                />
+              )}
+            </Select>
           )}
-        </Select>
+        />
         <Select
           type="search"
           options={[]}
@@ -130,13 +141,20 @@ export const StepOne = () => {
         <Controller
           control={control}
           name="tax_system"
-          render={({ field: { value, onChange } }) => (
+          rules={{
+            required: "Поле обязательно к заполнению",
+          }}
+          render={({
+            field: { value, onChange, name },
+            formState: { errors },
+          }) => (
             <Select
               type="search"
               label="Система налогооблажения"
               options={taxSystems ?? []}
               value={value}
               setValue={onChange}
+              error={errors[name]?.message}
             >
               {(items, onSelect) => (
                 <SelectOptions
@@ -152,6 +170,7 @@ export const StepOne = () => {
         <Controller
           control={control}
           name="accountant_phone"
+          rules={{ required: "Поле обязательно к заполнению" }}
           render={({
             formState: { errors },
             field: { value, onChange, name },
@@ -164,11 +183,16 @@ export const StepOne = () => {
               onChangeText={onChange}
               value={value}
               maxLength={PHONE_MASK.length}
+              isModal
+              error={errors[name]?.message}
             />
           )}
         />
         <Controller
           control={control}
+          rules={{
+            required: "Поле обязательно к заполнению",
+          }}
           name="juridical_address"
           render={({
             field: { value, name, onChange },
@@ -180,6 +204,7 @@ export const StepOne = () => {
               onSearch={searchAddress}
               value={value}
               setValue={(item) => onChange(item?.value ?? "")}
+              error={errors[name]?.message}
             >
               {(items, onSelect) => (
                 <SelectOptions
@@ -195,6 +220,9 @@ export const StepOne = () => {
         <Controller
           control={control}
           name="office_address"
+          rules={{
+            required: "Поле обязательно к заполнению",
+          }}
           render={({
             field: { value, name, onChange },
             formState: { errors },
@@ -206,6 +234,7 @@ export const StepOne = () => {
               value={value}
               setValue={(item) => onChange(item?.value ?? "")}
               disabled={addressCheckBox}
+              error={errors[name]?.message}
             >
               {(items, onSelect) => (
                 <SelectOptions

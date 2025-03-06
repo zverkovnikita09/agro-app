@@ -12,6 +12,7 @@ import { COLORS } from "@shared/lib/styles";
 import { useModalState } from "@shared/hooks/useModalState";
 import { Input } from "../Input";
 import { TextFieldModal } from "../TextFileldModal";
+import { ErrorText } from "../ErrorText";
 
 interface AsyncSelectProps<T> {
   searchFunction?: (query: string) => void;
@@ -21,6 +22,7 @@ interface AsyncSelectProps<T> {
   inputKeyboard?: TextInputProps["keyboardType"];
   value?: string;
   minLength?: number;
+  error?: string;
   setValue?: (value: T extends Array<any> ? T[number] : T) => void;
   children?: (
     elements: Awaited<T>,
@@ -36,6 +38,7 @@ export const AsyncSelect = <T,>({
   children,
   value,
   setValue,
+  error,
   minLength = 3,
 }: AsyncSelectProps<T>) => {
   const [options, setOptions] =
@@ -110,6 +113,7 @@ export const AsyncSelect = <T,>({
           label={label}
           value={value}
           multiline={true}
+          error={error}
         />
       </Pressable>
     </>

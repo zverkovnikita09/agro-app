@@ -10,6 +10,7 @@ interface StatusBageProps {
   style?: ViewProps["style"];
   icon?: JSX.Element;
   children?: string;
+  fontSize?: number;
 }
 
 export const StatusBadge = ({
@@ -17,6 +18,7 @@ export const StatusBadge = ({
   children,
   style,
   icon,
+  fontSize = 11,
 }: PropsWithChildren<StatusBageProps>) => {
   const theme = useMemo<{ color: Color; backgroundColor: Color }>(() => {
     switch (status) {
@@ -46,12 +48,12 @@ export const StatusBadge = ({
   const Content = icon ? (
     <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
       {icon}
-      <GilroyText fontSize={11} fontWeight="medium" color={theme.color}>
+      <GilroyText fontSize={fontSize} fontWeight="medium" color={theme.color}>
         {children}
       </GilroyText>
     </View>
   ) : (
-    <GilroyText fontSize={11} fontWeight="medium" color={theme.color}>
+    <GilroyText fontSize={fontSize} fontWeight="medium" color={theme.color}>
       {children}
     </GilroyText>
   );

@@ -3,6 +3,7 @@ import {
   cloneElement,
   isValidElement,
   PropsWithChildren,
+  ReactNode,
   useState,
 } from "react";
 import { View, ViewProps } from "react-native";
@@ -11,6 +12,7 @@ interface GridProps {
   style?: ViewProps["style"];
   columnsCount?: number;
   gap?: number;
+  children?: ReactNode | ((style: ViewProps["style"]) => ReactNode);
 }
 
 export const Grid = ({
@@ -18,27 +20,34 @@ export const Grid = ({
   children,
   columnsCount = 2,
   gap = 0,
-}: PropsWithChildren<GridProps>) => {
-  const [docsBlockWidth, setDocsBlockWidth] = useState(0);
+}: GridProps) => {
+  const [blockWidth, setBlockWidth] = useState(0);
 
-  const childrenWithProps = Children.map(children, (child) => {
-    if (isValidElement(child)) {
-      return cloneElement(child, {
-        //@ts-ignore
-        style: { width: docsBlockWidth / columnsCount - gap / 2 },
-      });
-    }
-    return child;
-  });
+  const childsStyle = { width: blockWidth / columnsCount - gap / 2 };
+
+  const childrenWithProps =
+    typeof children === "function"
+      ? null
+      : Children.map(children, (child) => {
+          if (isValidElement(child)) {
+            return cloneElement(child, {
+              //@ts-ignore
+              style: childsStyle,
+            });
+          }
+          return child;
+        });
 
   return (
     <View
       style={[{ flexDirection: "row", flexWrap: "wrap", gap }, style]}
       onLayout={(event) => {
-        setDocsBlockWidth(event.nativeEvent.layout.width);
+        setBlockWidth(event.nativeEvent.layout.width);
       }}
     >
-      {childrenWithProps}
+      {typeof children === "function"
+        ? children(childsStyle)
+        : childrenWithProps}
     </View>
   );
 };

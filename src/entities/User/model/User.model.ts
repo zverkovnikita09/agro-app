@@ -52,22 +52,3 @@ export interface User extends UserInfo {
   phone_number: string;
   files?: UserFiles[];
 }
-
-export interface LoginRequest {
-  phone_number: string;
-}
-
-export interface LoginResponse {
-    user: {
-      code: string;
-    }
-}
-
-export interface CodeVerificationRequest {
-  code: string;
-  phone_number: string;
-}
-
-export interface CodeVerificationResponse {
-    token: string
-}

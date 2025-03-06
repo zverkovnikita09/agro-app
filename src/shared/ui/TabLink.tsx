@@ -1,8 +1,7 @@
-import { LinkProps } from "expo-router";
-import { Navlink } from "./NavLink";
+import { Navlink, NavlinkProps } from "./NavLink";
 import { COLORS } from "@shared/lib/styles";
 
-export const TabLink = ({ style, ...props }: LinkProps) => {
+export const TabLink = ({ style, ...props }: NavlinkProps) => {
   return (
     <Navlink
       {...props}

@@ -1,10 +1,14 @@
+import { COLORS } from "@shared/lib/styles";
 import * as React from "react";
 import Svg, { SvgProps, Path } from "react-native-svg";
 
-export const HourglassIcon = (props: SvgProps) => (
-  <Svg fill="none" {...props}>
+export const HourglassIcon = ({
+  color = COLORS.blackGrey,
+  ...props
+}: SvgProps) => (
+  <Svg fill="none" {...props} viewBox="0 0 16 16">
     <Path
-      stroke="#B6B6B6"
+      stroke={color}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={1.5}

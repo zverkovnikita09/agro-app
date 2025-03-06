@@ -2,7 +2,7 @@ import * as React from "react";
 import Svg, { SvgProps, Path } from "react-native-svg";
 
 export const CloseIcon = (props: SvgProps) => (
-  <Svg fill="none" {...props}>
+  <Svg fill="none" {...props} viewBox="0 0 18 18">
     <Path
       stroke="#CCC"
       strokeLinecap="round"

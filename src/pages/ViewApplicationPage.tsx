@@ -107,29 +107,30 @@ export const ViewApplicationPage = ({
 
   return (
     <View style={styles.wrapper}>
-      <View style={styles.header}>
-        <View style={styles.title}>
-          <Button onPress={goBack}>
-            <ArrowIcon width={24} height={24} />
-          </Button>
-          <Title fontWeight="bold" fontSize={18}>
-            Заявка № {order_number}
-          </Title>
-          <GilroyText color={COLORS.blackGrey}>от: {created_at}</GilroyText>
-        </View>
-        {!isSuccess && !userApplications.find((item) => item.id === id) && (
+      {!isSuccess && !userApplications.find((item) => item.id === id) && (
+        <View style={styles.buttonWrapper}>
           <Button
             isLoading={isLoading}
             theme={ButtonTheme.ACCENT_WITH_BLACK_TEXT}
             size={ButtonSize.M}
             onPress={onSubmit}
-            style={styles.button}
           >
             Откликнуться
           </Button>
-        )}
-      </View>
-      <ScrollView style={styles.scrolalble}>
+        </View>
+      )}
+      <ScrollView contentContainerStyle={styles.scrolalble}>
+        <View style={styles.header}>
+          <View style={styles.title}>
+            <Button onPress={goBack}>
+              <ArrowIcon width={24} height={24} />
+            </Button>
+            <Title fontWeight="bold" fontSize={18}>
+              Заявка № {order_number}
+            </Title>
+            <GilroyText color={COLORS.blackGrey}>от: {created_at}</GilroyText>
+          </View>
+        </View>
         <GilroyText fontWeight="semi-bold">
           Сроки:{" "}
           <GilroyText color={COLORS.blackGrey} fontSize={14}>
@@ -248,18 +249,20 @@ export const ViewApplicationPage = ({
               </ApplicationInfoItem>
             </>
           )}
-          <View style={styles.desription}>
-            <GilroyText
-              color={COLORS.blackGrey}
-              fontSize={14}
-              fontWeight="medium"
-            >
-              Примечание
-            </GilroyText>
-            <GilroyText fontWeight="medium" fontSize={14}>
-              {description}
-            </GilroyText>
-          </View>
+          {description && (
+            <View style={styles.desription}>
+              <GilroyText
+                color={COLORS.blackGrey}
+                fontSize={14}
+                fontWeight="medium"
+              >
+                Примечание
+              </GilroyText>
+              <GilroyText fontWeight="medium" fontSize={14}>
+                {description}
+              </GilroyText>
+            </View>
+          )}
         </CardContainer>
         <CardContainer style={[styles.cardContainer, { marginBottom: 24 }]}>
           <Title fontSize={17} fontWeight="bold">
@@ -302,7 +305,6 @@ export const ViewApplicationPage = ({
 
 const styles = StyleSheet.create({
   wrapper: {
-    paddingTop: 24,
     flex: 1,
   },
   title: {
@@ -311,14 +313,21 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   header: {
-    paddingHorizontal: 16,
     paddingBottom: 24,
   },
-  button: {
-    marginTop: 20,
+  buttonWrapper: {
+    position: "absolute",
+    zIndex: 1,
+    bottom: 0,
+    width: "100%",
+    backgroundColor: COLORS.white,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
   },
   scrolalble: {
     paddingHorizontal: 16,
+    paddingTop: 24,
+    paddingBottom: 50,
   },
   cardContainer: {
     padding: 16,

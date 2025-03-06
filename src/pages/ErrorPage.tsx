@@ -1,3 +1,4 @@
+import { Routes } from "@shared/lib/constants";
 import { Button, ButtonSize, ButtonTheme } from "@shared/ui/Button";
 import { GilroyText } from "@shared/ui/GilroyText";
 import { PageContainer } from "@shared/ui/PageContainer";
@@ -21,7 +22,7 @@ export const ErrorPage = () => {
         />
         <Title style={styles.title}>Упс!</Title>
         <GilroyText>Что-то пошло не так</GilroyText>
-        <Link href="/" asChild style={styles.link}>
+        <Link href={Routes.default} asChild style={styles.link}>
           <Button
             theme={ButtonTheme.ACCENT_WITH_BLACK_TEXT}
             size={ButtonSize.M}

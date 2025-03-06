@@ -1,2 +1,2 @@
 export * from "./model/User.model";
-// export * from "./model/User.api";
+export * from "./model/User.api";

@@ -6,6 +6,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { authReducer } from "@entities/Auth";
 import { baseApi } from "@shared/api/api";
 import { applicationsReducer } from "@entities/Applications";
+import { filtersReducer } from "@widgets/Filters";
+import { sortReducer } from "@widgets/Sort";
 
 const persistConfig = {
   key: 'root',
@@ -17,6 +19,8 @@ export const RootReducer: Reducer = combineReducers({
   notifications: notificationReducer,
   auth: authReducer,
   applications: applicationsReducer,
+  filters: filtersReducer,
+  sort: sortReducer,
   [baseApi.reducerPath]: baseApi.reducer
 });
 

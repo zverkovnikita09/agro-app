@@ -1,10 +1,31 @@
 import { baseApi } from "@shared/api/api";
 import { Application } from "./Applications.model";
+import { SortTypes } from "@widgets/Sort";
+import { FiltersType } from "@widgets/Filters";
 
 export const applicationsApi = baseApi.injectEndpoints({
   endpoints: ({mutation, query})=>({
-    getApplications: query<Application[], void>({
-      query: () => "/orders",
+    getApplications: query<Application[], {sort?: SortTypes, filters?:FiltersType} | void>({
+      query: (params) => {
+        const queries = new URLSearchParams();
+        if(params?.sort){
+          queries.append("sort", params.sort)
+        }
+        if(params?.filters && Object.keys(params.filters).length) {
+          Object.entries(params.filters).forEach(([key, value])=>{
+            if(Array.isArray(value)){
+              value.forEach((arrValue)=>queries.append(`${key}[]`, arrValue))
+            }
+            else {
+              queries.append(key,value)
+            }
+          })
+        }                        
+        return {
+          url: '/orders',
+          params: queries,
+        };
+      },
       transformResponse: (response: {data: Application[]})=> response?.data,
       providesTags: ["Applications"],
     }),

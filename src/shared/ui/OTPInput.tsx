@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import { ErrorText } from "./ErrorText";
 import { Input } from "./Input";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { COLORS } from "@shared/lib/styles";
 import { GilroyText } from "./GilroyText";
 import { InputCaret } from "./InputCaret";
@@ -37,6 +37,12 @@ export const OTPInput = ({
     inputRef.current?.blur();
     inputRef?.current?.focus();
   };
+
+  useEffect(() => {
+    if (otp.length === length) {
+      onSubmit?.();
+    }
+  }, [otp, onSubmit]);
 
   return (
     <>

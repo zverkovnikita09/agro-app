@@ -1,7 +1,7 @@
 import { Color, COLORS } from "@shared/lib/styles";
 import { Link, LinkProps, usePathname } from "expo-router";
 
-interface NavlinkProps extends LinkProps {
+export interface NavlinkProps extends LinkProps {
   activeColor?: Color;
   inactiveColor?: Color;
   activeCondition?: boolean;

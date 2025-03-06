@@ -15,7 +15,14 @@ export const ErrorText = ({
 }: PropsWithChildren<ErrorTextProps>) => {
   return (
     <GilroyText
-      style={[{ color: COLORS.error, marginTop: noMargin ? 0 : 5 }, style]}
+      style={[
+        {
+          color: COLORS.error,
+          marginTop: noMargin ? 0 : 7,
+          marginLeft: noMargin ? 0 : 3,
+        },
+        style,
+      ]}
     >
       {children}
     </GilroyText>
