@@ -107,6 +107,7 @@ export const AsyncSelect = <T,>({
       >
         <Input
           type="label"
+          pointerEvents="none"
           editable={false}
           disabled={disabled}
           style={styles.input}

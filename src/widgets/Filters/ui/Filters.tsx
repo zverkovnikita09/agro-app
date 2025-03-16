@@ -11,15 +11,12 @@ import { GilroyText } from "@shared/ui/GilroyText";
 import { Grid } from "@shared/ui/Grid";
 import { Input } from "@shared/ui/Input";
 import { useDispatch, useSelector } from "react-redux";
-import { Toggle } from "@shared/ui/Toggle";
 import { FiltersSelectors } from "../model/Filters.selectors";
-import { setFilters, setSaveFilters } from "../model/Filters.slice";
-import { useEffect, useRef, useState } from "react";
-import { InputRange } from "@shared/ui/InputRange";
+import { setFilters } from "../model/Filters.slice";
+import { useEffect, useRef } from "react";
 import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
 import { FiltersType } from "../model/Filters.model";
 import { useGetOptionsQuery, useGetRegionsQuery } from "../model/Filters.api";
-import { CheckBox } from "@shared/ui/CheckBox";
 import { RadioButtonGroup } from "@shared/ui/RadioButton";
 import { CheckBoxGroup } from "@shared/ui/CheckBox/CheckBoxGroup";
 import { router } from "expo-router";
@@ -37,7 +34,6 @@ const WEEKEND_OPTIONS = [
 
 export const Filters = () => {
   const dispatch = useDispatch();
-  const isSaveFilters = useSelector(FiltersSelectors.selectIsSaveFilters);
   const savedFilters = useSelector(FiltersSelectors.selectFilters);
   const scrollRef = useRef<ScrollView>(null);
 
@@ -49,11 +45,6 @@ export const Filters = () => {
   });
 
   const { control, setValue, reset, handleSubmit } = methods;
-
-  const [distance_from, distance_to] = useWatch<FiltersType>({
-    control,
-    name: ["distance_from", "distance_to"],
-  });
 
   const { data: options, isLoading: isOptionsLoading } = useGetOptionsQuery();
   const { data: regions, isLoading: isRegionsLoading } = useGetRegionsQuery();
@@ -121,11 +112,6 @@ export const Filters = () => {
       }
     );
   }, [savedFilters, isLoading]);
-
-  const handleDistanceChange = ([from, to]: [number, number]) => {
-    setValue("distance_from", from);
-    setValue("distance_to", to);
-  };
 
   const onSubmit = (data: FiltersType) => {
     const optimizedData = (
@@ -212,18 +198,38 @@ export const Filters = () => {
             }}
           >
             <FilterAccordion title="Расстояние">
-              <InputRange
-                from={minDistance}
-                to={maxDistance}
-                getFromText={(from) => `от ${from} км`}
-                getToText={(to) => `до ${to} км`}
-                value={[
-                  Number(distance_from) || minDistance,
-                  Number(distance_to) || maxDistance,
-                ]}
-                setValue={handleDistanceChange}
-                step={100}
-              />
+              <Grid gap={12}>
+                {(columnStyle) => (
+                  <>
+                    <Controller
+                      control={control}
+                      name="distance_from"
+                      render={({ field: { onChange, value } }) => (
+                        <Input
+                          placeholder="От"
+                          value={value?.toString()}
+                          onChangeText={onChange}
+                          keyboardType="number-pad"
+                          style={columnStyle}
+                        />
+                      )}
+                    />
+                    <Controller
+                      control={control}
+                      name="distance_to"
+                      render={({ field: { onChange, value } }) => (
+                        <Input
+                          placeholder="До"
+                          value={value?.toString()}
+                          onChangeText={onChange}
+                          keyboardType="number-pad"
+                          style={columnStyle}
+                        />
+                      )}
+                    />
+                  </>
+                )}
+              </Grid>
             </FilterAccordion>
             {!!regions?.load_regions?.length && (
               <FilterAccordion title="Регион погрузки">
@@ -374,35 +380,33 @@ export const Filters = () => {
                 controlCheckBoxText="Грузят в выходные"
               />
             </FilterAccordion>
-            <FilterAccordion title="Дополнительные фильтры">
-              {!!options?.unload_methods.length && (
-                <FilterAccordion title="Тип выгрузки">
-                  <CheckBoxGroup
-                    options={options.unload_methods}
-                    control={control}
-                    name="unload_methods"
-                    getOptionsLabel={(item) => item.title}
-                    getOptionsValue={(item) => item.id}
-                  />
-                </FilterAccordion>
-              )}
-              <FilterAccordion title="Хартия">
-                <Controller
-                  name="is_full_charter"
+            {!!options?.unload_methods.length && (
+              <FilterAccordion title="Тип выгрузки">
+                <CheckBoxGroup
+                  options={options.unload_methods}
                   control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <RadioButtonGroup
-                      buttons={[
-                        { value: undefined, text: "Не указано" },
-                        { value: 1, text: "Полная" },
-                        { value: 0, text: "Не полная" },
-                      ]}
-                      onChange={onChange}
-                      value={value}
-                    />
-                  )}
+                  name="unload_methods"
+                  getOptionsLabel={(item) => item.title}
+                  getOptionsValue={(item) => item.id}
                 />
               </FilterAccordion>
+            )}
+            <FilterAccordion title="Хартия">
+              <Controller
+                name="is_full_charter"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <RadioButtonGroup
+                    buttons={[
+                      { value: undefined, text: "Не указано" },
+                      { value: 1, text: "Полная" },
+                      { value: 0, text: "Не полная" },
+                    ]}
+                    onChange={onChange}
+                    value={value}
+                  />
+                )}
+              />
             </FilterAccordion>
           </ScrollView>
         )}

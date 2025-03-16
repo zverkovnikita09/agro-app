@@ -28,6 +28,7 @@ export const InputModal = ({
       return cloneElement(child, {
         //@ts-ignore
         editable: false,
+        pointerEvents: "none",
       });
     }
     return null;

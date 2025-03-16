@@ -2,6 +2,7 @@ import { RootState } from "@app/store";
 import {createApi, fetchBaseQuery }from "@reduxjs/toolkit/query/react"
 
 const baseUrl = "https://admin.agrozernovoz.ru/api/v1";
+const baseUrlDev = "https://agro-back.pisateli-studio.ru/api/v1";
 
 export const baseApi = createApi({
 	tagTypes: ["Applications", "UserApplications", "User", "Docs"],

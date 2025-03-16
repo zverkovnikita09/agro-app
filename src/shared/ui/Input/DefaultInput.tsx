@@ -25,6 +25,7 @@ export const DefaultInput = forwardRef<TextInput, MainInputProps>(
           ]}
           selectionColor={COLORS.blackText}
           onChangeText={onChangeText}
+          scrollEnabled={false}
         />
       </>
     );

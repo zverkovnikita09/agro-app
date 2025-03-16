@@ -1,13 +1,6 @@
 import { COLORS } from "@shared/lib/styles";
 import React from "react";
-import {
-  Pressable,
-  SafeAreaView,
-  View,
-  StyleSheet,
-  Button,
-  ViewProps,
-} from "react-native";
+import { Pressable, StyleSheet, ViewProps } from "react-native";
 import Animated, {
   interpolate,
   interpolateColor,

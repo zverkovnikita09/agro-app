@@ -113,6 +113,7 @@ export const SelectWithSearch = <T,>({
             value={value}
             multiline={true}
             error={error}
+            pointerEvents="none"
           />
         </Pressable>
       </>

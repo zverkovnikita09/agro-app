@@ -53,6 +53,7 @@ export const DefaultSelect = <T,>({
             label={label}
             value={value}
             multiline={true}
+            pointerEvents="none"
           />
         </Pressable>
       </>

@@ -42,7 +42,7 @@ export const OTPInput = ({
     if (otp.length === length) {
       onSubmit?.();
     }
-  }, [otp, onSubmit]);
+  }, [otp]);
 
   return (
     <>

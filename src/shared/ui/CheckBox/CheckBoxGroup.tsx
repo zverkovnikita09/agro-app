@@ -53,7 +53,7 @@ export const CheckBoxGroup = <T extends FieldValues, OptionType>({
         render={({ field: { value, onChange } }) => {
           return (
             <DefaultCheckBox
-              key={getOptionsLabel?.(item)}
+              key={index}
               isChecked={!!value}
               onChange={(checked) => {
                 onChange(checked ? getOptionsValue?.(item) : "");
