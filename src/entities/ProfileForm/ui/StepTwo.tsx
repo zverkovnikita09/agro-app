@@ -13,6 +13,7 @@ import {
 import { EMAIL_REGEXP, MASK_REGEXP } from "@shared/lib/validation";
 import { Select, SelectOptions } from "@shared/ui/Select";
 import { GENDER_OPTIONS, ProfileForm } from "../model/ProfileForm.model";
+import { isIOS } from "@shared/lib/checkPlatform";
 
 export const StepTwo = () => {
   const { setValue, control, watch } = useFormContext<ProfileForm>();
@@ -51,7 +52,7 @@ export const StepTwo = () => {
               type="label"
               mask={SERIE_MASK}
               label="Серия паспорта"
-              keyboardType="number-pad"
+              keyboardType={isIOS ? "numbers-and-punctuation" : "number-pad"}
               onChangeText={onChange}
               value={value}
               maxLength={SERIE_MASK.length}
@@ -72,7 +73,7 @@ export const StepTwo = () => {
               type="label"
               mask={NUMBER_MASK}
               label="Номер паспорта"
-              keyboardType="number-pad"
+              keyboardType={isIOS ? "numbers-and-punctuation" : "number-pad"}
               onChangeText={onChange}
               value={value}
               maxLength={NUMBER_MASK.length}
@@ -138,7 +139,7 @@ export const StepTwo = () => {
               type="label"
               mask={DATE_MASK}
               label="Дата выдачи"
-              keyboardType="number-pad"
+              keyboardType={isIOS ? "numbers-and-punctuation" : "number-pad"}
               onChangeText={onChange}
               value={value}
               maxLength={DATE_MASK.length}
@@ -186,7 +187,7 @@ export const StepTwo = () => {
               mask={SNILS_MASK}
               onChangeText={onChange}
               value={value}
-              keyboardType="number-pad"
+              keyboardType={isIOS ? "numbers-and-punctuation" : "number-pad"}
               maxLength={SNILS_MASK.length}
               isModal
               error={errors[name]?.message}
@@ -283,7 +284,7 @@ export const StepTwo = () => {
               type="label"
               mask={DATE_MASK}
               label="Дата рождения"
-              keyboardType="number-pad"
+              keyboardType={isIOS ? "numbers-and-punctuation" : "number-pad"}
               onChangeText={onChange}
               value={value}
               maxLength={DATE_MASK.length}
@@ -365,7 +366,7 @@ export const StepTwo = () => {
               <Input
                 type="label"
                 label="ИНН"
-                keyboardType="number-pad"
+                keyboardType={isIOS ? "numbers-and-punctuation" : "number-pad"}
                 onChangeText={onChange}
                 value={value}
                 maxLength={12}

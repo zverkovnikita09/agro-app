@@ -1,6 +1,7 @@
 import { useAppDispatch } from "@app/store";
 import { setTimeOfLogin, setUserPhone, useLoginMutation } from "@entities/Auth";
 import { addNotification, NotificationType } from "@entities/Notifications";
+import { isIOS } from "@shared/lib/checkPlatform";
 import { PHONE_MASK } from "@shared/lib/masks";
 import { Button, ButtonSize, ButtonTheme } from "@shared/ui/Button";
 import { GilroyText } from "@shared/ui/GilroyText";
@@ -54,7 +55,7 @@ export const Login = () => {
       <Input
         type="mask"
         placeholder="Ваш номер телефона"
-        keyboardType="phone-pad"
+        keyboardType={isIOS ? "numbers-and-punctuation" : "phone-pad"}
         style={styles.input}
         value={phoneNumber}
         onChangeText={setPhoneNumber}

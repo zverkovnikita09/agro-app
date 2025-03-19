@@ -16,6 +16,7 @@ import { UserInfo } from "@entities/User";
 import { PHONE_MASK } from "@shared/lib/masks";
 import { useGetTaxSystemsQuery } from "../model/ProfileForm.api";
 import { ProfileForm } from "../model/ProfileForm.model";
+import { isIOS } from "@shared/lib/checkPlatform";
 
 export const StepOne = () => {
   const [addressCheckBox, toggleAddressCheckBox] = useToggleState(true);
@@ -179,7 +180,7 @@ export const StepOne = () => {
               type="label"
               mask={PHONE_MASK}
               label="Номер телефона бухгалтера"
-              keyboardType="phone-pad"
+              keyboardType={isIOS ? "numbers-and-punctuation" : "phone-pad"}
               onChangeText={onChange}
               value={value}
               maxLength={PHONE_MASK.length}
