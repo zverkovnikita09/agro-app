@@ -14,7 +14,10 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.Agro"
+      "bundleIdentifier": "com.anonymous.Agro",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "This app needs access to your photo library"
+      }
     },
     "android": {
       "jsEngine": "hermes",

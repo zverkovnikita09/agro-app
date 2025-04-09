@@ -33,14 +33,14 @@ export const Login = () => {
       }
       dispatch(setTimeOfLogin(new Date().getTime()));
       dispatch(setUserPhone(phoneNumber));
-      // dispatch(
-      //   addNotification({
-      //     type: NotificationType.SUCCESS,
-      //     id: performance.now().toString(),
-      //     message: response.data.user.code,
-      //     timeout: 10000,
-      //   })
-      // );
+      dispatch(
+        addNotification({
+          type: NotificationType.SUCCESS,
+          id: performance.now().toString(),
+          message: response.data.user.code,
+          timeout: 10000,
+        })
+      );
     } catch (e) {
       console.log(e);
     }

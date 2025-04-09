@@ -1,22 +1,20 @@
 import { StyleSheet, View } from "react-native";
 import { Title } from "@shared/ui/Title";
 import { useFormContext } from "react-hook-form";
-import { FilePicker } from "@shared/ui/FilePicker";
+import { File, FilePicker } from "@shared/ui/FilePicker";
 import { DocPicker } from "./DocPicker";
 import { FilesToSendType, ProfileForm } from "../model/ProfileForm.model";
 import { DocumentPickerAsset } from "expo-document-picker";
+import { ImagePickerAsset } from "expo-image-picker";
 
 const FILE_NAMES = ["Реквизиты", "ПСФЛ", "ЕФС", "Патент", "УСН", "НДС"];
 
 export const StepThree = () => {
-  const { setValue, control, watch } = useFormContext<ProfileForm>();
+  const { setValue, watch } = useFormContext<ProfileForm>();
 
   const files = watch("files");
 
-  const handleFilesChange = (
-    name: string,
-    file: DocumentPickerAsset | null
-  ) => {
+  const handleFilesChange = (name: string, file: File | null) => {
     if (!file) return;
 
     const existingFile = files?.find((item) => item.file_type === name);
@@ -27,7 +25,7 @@ export const StepThree = () => {
         .concat([
           {
             file_type: name,
-            file: { name: file.name, type: file.mimeType ?? "", uri: file.uri },
+            file,
             file_id: existingFile?.file_id,
           },
         ]) ?? [];

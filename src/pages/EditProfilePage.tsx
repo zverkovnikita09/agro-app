@@ -13,19 +13,17 @@ import {
   useUpdateFilesMutation,
   useUpdateUserProfileMutation,
 } from "@entities/ProfileForm";
-import { convertFilesToFormData } from "@entities/ProfileForm/lib/ProfileForm.lib";
-import { UserInfo } from "@entities/User";
 import { useGetUserDataQuery } from "@entities/User/model/User.api";
 import { CameraIcon } from "@images/svg/CameraIcon";
 import { useSendQueryHandler } from "@shared/hooks/useSendQueryHandler";
 import { Routes } from "@shared/lib/constants";
 import { COLORS } from "@shared/lib/styles";
 import { Button, ButtonSize, ButtonTheme } from "@shared/ui/Button";
-import { FilePicker } from "@shared/ui/FilePicker";
+import { File, FilePicker } from "@shared/ui/FilePicker";
 import { GilroyText } from "@shared/ui/GilroyText";
 import { LoadingBlock } from "@shared/ui/LoadingBlock";
 import { Title } from "@shared/ui/Title";
-import { DocumentPickerAsset } from "expo-document-picker";
+import { ImagePickerAsset } from "expo-image-picker";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -43,7 +41,7 @@ export const EditProfilePage = () => {
   const [updateFiles] = useUpdateFilesMutation();
   const [deleteFiles] = useDeleteFilesMutation();
 
-  const [newAvatar, setNewAvatar] = useState<DocumentPickerAsset | null>(null);
+  const [newAvatar, setNewAvatar] = useState<File | null>(null);
 
   const {
     files: userFiles,
@@ -87,8 +85,6 @@ export const EditProfilePage = () => {
   const userDocs = userFiles?.filter(
     (file) => !INVALID_DOCUMENTS.includes(file.type)
   );
-
-  console.log(newAvatar);
 
   const { id } = useLocalSearchParams<{ id: string }>();
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -186,17 +182,12 @@ export const EditProfilePage = () => {
     }
 
     if (newAvatar) {
-      const avatar = {
-        uri: newAvatar.uri,
-        name: newAvatar.name,
-        type: newAvatar.mimeType ?? "image/jpeg",
-      };
       if (initialAvatar) {
-        promisesArray.push(updateAvatar({ avatar }));
+        promisesArray.push(updateAvatar({ avatar: newAvatar }));
       } else {
         promisesArray.push(
           createAvatar({
-            avatar,
+            avatar: newAvatar,
           })
         );
       }
@@ -288,7 +279,7 @@ export const EditProfilePage = () => {
     <ScrollView style={styles.wrapper} keyboardShouldPersistTaps={"handled"}>
       <View style={styles.header}>
         <View style={styles.avatar}>
-          <FilePicker onPress={(file) => setNewAvatar(file)}>
+          <FilePicker onPress={setNewAvatar}>
             {initialAvatar || newAvatar ? (
               <Image
                 source={{

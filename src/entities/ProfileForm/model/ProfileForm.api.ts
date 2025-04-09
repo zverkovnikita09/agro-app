@@ -33,7 +33,7 @@ export const usersApi = baseApi.injectEndpoints({
           uri: avatar?.uri,
           name: avatar?.name,
           type: avatar?.type
-        })
+        })        
       return {url:"/userprofile/avatar/update", method: "POST", body: formData}     
   }}),
     updateUserProfile: mutation<void, {id: string; data: UserInfo}>({
