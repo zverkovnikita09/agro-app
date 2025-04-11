@@ -6,7 +6,7 @@ const baseUrlDev = "https://agro-back.pisateli-studio.ru/api/v1";
 
 export const baseApi = createApi({
 	tagTypes: ["Applications", "UserApplications", "User", "Docs"],
-  baseQuery: fetchBaseQuery({baseUrl: baseUrlDev, prepareHeaders: (headers, {getState})=>{
+  baseQuery: fetchBaseQuery({baseUrl, prepareHeaders: (headers, {getState})=>{
     const state = getState() as RootState;
 
 		const token = state.auth.token;

@@ -20,10 +20,10 @@ return formData;
 
 export const convertFilesToUrlParams = (files: User["files"] | undefined, name = "file_id"): URLSearchParams => {  
   const url = new URLSearchParams();
-    files?.forEach(({id}, index)=>{
+    files?.forEach(({id})=>{
       if(id){
         url.append(`${name}[]`, id);
       }
-    })
+    })    
 return url;
 }

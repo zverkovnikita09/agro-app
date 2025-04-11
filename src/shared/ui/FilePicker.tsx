@@ -96,6 +96,7 @@ export const FilePicker = ({
       uri,
     });
   };
+
   const pickFile = async () => {
     closeModal();
     const result = await getDocumentAsync({
@@ -104,9 +105,10 @@ export const FilePicker = ({
       copyToCacheDirectory: true,
     });
     if (result.canceled) return;
-    const { uri, file, mimeType } = result.assets[0];
+    const { uri, name, mimeType } = result.assets[0];
+
     onPress?.({
-      name: file?.name ?? "",
+      name,
       uri,
       type: mimeType ?? "",
     });

@@ -4,8 +4,6 @@ import { useFormContext } from "react-hook-form";
 import { File, FilePicker } from "@shared/ui/FilePicker";
 import { DocPicker } from "./DocPicker";
 import { FilesToSendType, ProfileForm } from "../model/ProfileForm.model";
-import { DocumentPickerAsset } from "expo-document-picker";
-import { ImagePickerAsset } from "expo-image-picker";
 
 const FILE_NAMES = ["Реквизиты", "ПСФЛ", "ЕФС", "Патент", "УСН", "НДС"];
 
