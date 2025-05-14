@@ -23,7 +23,6 @@ import { File, FilePicker } from "@shared/ui/FilePicker";
 import { GilroyText } from "@shared/ui/GilroyText";
 import { LoadingBlock } from "@shared/ui/LoadingBlock";
 import { Title } from "@shared/ui/Title";
-import { ImagePickerAsset } from "expo-image-picker";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";

@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { FiltersSelectors } from "../model/Filters.selectors";
 import { setFilters } from "../model/Filters.slice";
 import { useEffect, useRef } from "react";
-import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
+import { Controller, FormProvider, useForm } from "react-hook-form";
 import { FiltersType } from "../model/Filters.model";
 import { useGetOptionsQuery, useGetRegionsQuery } from "../model/Filters.api";
 import { RadioButtonGroup } from "@shared/ui/RadioButton";
