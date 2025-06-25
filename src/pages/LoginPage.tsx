@@ -4,7 +4,7 @@ import { OTP } from "@features/OTP";
 import { Routes } from "@shared/lib/constants";
 import { PageContainer } from "@shared/ui/PageContainer";
 import { Redirect } from "expo-router";
-import { Image, StyleSheet } from "react-native";
+import {Image, StyleSheet} from "react-native";
 import { useSelector } from "react-redux";
 
 export const LoginPage = () => {

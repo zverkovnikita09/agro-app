@@ -2,7 +2,7 @@ export interface AuthState {
   phoneNumber?: string;
   token?: string;
   timeOfLogin?: number;
-} 
+}
 
 export interface LoginRequest {
   phone_number: string;
@@ -17,6 +17,7 @@ export interface LoginResponse {
 export interface CodeVerificationRequest {
   code: string;
   phone_number: string;
+  device_token?: string;
 }
 
 export interface CodeVerificationResponse {

@@ -19,8 +19,14 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { useSelector } from "react-redux";
 
+import {
+  setupNotificationHandler,
+  registerPushNotificationsAsync
+} from "@src/notifications";
+
 export const OTP = () => {
   const [otp, setOtp] = useState("");
+  const [expoToken, setExpoToken] = useState("");
   const phoneNumber = useSelector(AuthSelectors.selectPhoneNumber);
   const timeOfLogin = useSelector(AuthSelectors.selectTimeOfLogin);
   const dispatch = useAppDispatch();
@@ -30,12 +36,17 @@ export const OTP = () => {
     useCodeVerificationMutation();
   const [login] = useLoginMutation();
 
+  function getValidPushToken(token: unknown): string | undefined {
+    return typeof token === 'string' ? token : undefined;
+  }
+
   const onSubmit = async () => {
     if (otp.length < 5) return;
     try {
       const response = await handleVerification({
         phone_number: phoneNumber!,
         code: otp,
+        device_token: getValidPushToken(expoToken)
       });
 
       if (response.error) {
@@ -83,6 +94,22 @@ export const OTP = () => {
       console.log(e);
     }
   };
+
+  useEffect(() => {
+    const cleanup = setupNotificationHandler();
+
+    registerPushNotificationsAsync().then(token => {
+      if (token) {
+        console.log('Expo token: ', token)
+        setExpoToken(token)
+        // сохранить в AsyncStorage или в state менеджер
+      }
+    });
+
+    return () => {
+      cleanup();
+    };
+  }, []);
 
   useLayoutEffect(() => {
     if (!timeOfLogin) return;

@@ -4,7 +4,15 @@ import { CodeVerificationRequest, CodeVerificationResponse, LoginRequest, LoginR
 export const usersApi = baseApi.injectEndpoints({
   endpoints: ({mutation, query})=>({
     codeVerification: mutation<CodeVerificationResponse, CodeVerificationRequest>({
-      query: ({code, phone_number})=>({url:"/login/verification", method: "POST", body: {phone_number, code}}),
+      query: ({code, phone_number, device_token}) => ({
+        url:"/login/verification",
+        method: "POST",
+        body: {
+          phone_number,
+          code,
+          device_token
+        }
+      }),
       transformResponse: (response: {data: CodeVerificationResponse})=> response.data,
     }),
     login: mutation<LoginResponse, LoginRequest>({

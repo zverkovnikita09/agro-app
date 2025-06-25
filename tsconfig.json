@@ -12,6 +12,7 @@
       "@entities/*": ["src/entities/*"],
       "@widgets/*": ["src/widgets/*"],
       "@app/*": ["src/core/*"],
+      "@src/*": ["src/*"]
     }
   }
 }

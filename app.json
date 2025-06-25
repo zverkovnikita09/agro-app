@@ -25,16 +25,24 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#F2B430"
       },
+      "googleServicesFile": "./google-services.json",
       "package": "com.anonymous.Agro"
     },
     "plugins": [
-      "expo-font"
+      "expo-font",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#ffffff"
+        }
+      ]
     ],
     "extra": {
       "eas": {
-        "projectId": "ec5f0c22-2fd6-451a-84e4-af360a9ee352"
+        "projectId": "74d4d757-7c1c-4054-b1e3-031dcf09830a"
       }
     },
-    "owner": "nikita_0998"
+    "owner": "akmatali"
   }
 }
