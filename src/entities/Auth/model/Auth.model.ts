@@ -8,6 +8,10 @@ export interface LoginRequest {
   phone_number: string;
 }
 
+export interface LogoutRequest {
+    device_token: string
+}
+
 export interface LoginResponse {
     user: {
       code: string;

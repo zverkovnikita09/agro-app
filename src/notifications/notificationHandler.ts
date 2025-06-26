@@ -27,20 +27,4 @@ export function setupNotificationHandler() {
             }
         }
     })()
-
-
-    // Слушатель входящих уведомлений
-    const notificationSubscription = Notifications.addNotificationReceivedListener(notification => {
-        console.log("📩 Уведомление получено:", notification);
-    });
-
-    // Слушатель нажатий по уведомлению
-    const responseSubscription = Notifications.addNotificationResponseReceivedListener(response => {
-        console.log("👆 Нажали на уведомление:", response);
-    });
-
-    return () => {
-        notificationSubscription.remove()
-        responseSubscription.remove()
-    };
 }

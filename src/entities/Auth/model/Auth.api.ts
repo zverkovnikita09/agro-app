@@ -1,5 +1,11 @@
 import { baseApi } from "@shared/api/api";
-import { CodeVerificationRequest, CodeVerificationResponse, LoginRequest, LoginResponse } from "./Auth.model";
+import {
+  CodeVerificationRequest,
+  CodeVerificationResponse,
+  LoginRequest,
+  LoginResponse,
+  LogoutRequest
+} from "./Auth.model";
 
 export const usersApi = baseApi.injectEndpoints({
   endpoints: ({mutation, query})=>({
@@ -20,7 +26,16 @@ export const usersApi = baseApi.injectEndpoints({
       transformResponse: (response: {data: LoginResponse})=> response?.data,
       invalidatesTags: ["User", "UserApplications", "Docs"]
     }),
+    logout: mutation<void, LogoutRequest>({
+      query: (device_token ) => ({
+        url: "/logout",
+        method: "DELETE",
+        body: {
+          device_token,
+        },
+      }),
+    }),
   }),
   overrideExisting: true,
 })
-export const {useCodeVerificationMutation, useLoginMutation} = usersApi;
+export const {useCodeVerificationMutation, useLoginMutation, useLogoutMutation } = usersApi;

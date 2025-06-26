@@ -28,6 +28,7 @@ import {
   StyleSheet,
   View,
 } from "react-native";
+import { logoutUser } from "@shared/lib/logoutUser";
 
 export default function Layout() {
   const dispatch = useAppDispatch();
@@ -62,6 +63,7 @@ export default function Layout() {
   } = userInfo || {};
 
   const logout = () => {
+    logoutUser()
     dispatch(removeToken());
     router.replace(Routes.login);
   };

@@ -1,5 +1,4 @@
 import { combineReducers, Reducer } from "@reduxjs/toolkit";
-import { RootState } from "./store.model";
 import { notificationReducer } from "@entities/Notifications";
 import { persistReducer } from 'redux-persist'
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -8,11 +7,12 @@ import { baseApi } from "@shared/api/api";
 import { applicationsReducer } from "@entities/Applications";
 import { filtersReducer } from "@widgets/Filters";
 import { sortReducer } from "@widgets/Sort";
+import expoPushTokenReducer from './expoPushTokenSlice';
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whiteList: ["auth"]
+  whitelist: ["auth", "expoPushToken"]
 }
 
 export const RootReducer: Reducer = combineReducers({
@@ -21,6 +21,7 @@ export const RootReducer: Reducer = combineReducers({
   applications: applicationsReducer,
   filters: filtersReducer,
   sort: sortReducer,
+  expoPushToken: expoPushTokenReducer,
   [baseApi.reducerPath]: baseApi.reducer
 });
 

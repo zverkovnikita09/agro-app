@@ -18,6 +18,7 @@ import { router } from "expo-router";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { useSelector } from "react-redux";
+import { setExpoPushToken } from '@app/store/model/expoPushTokenSlice';
 
 import {
   setupNotificationHandler,
@@ -96,19 +97,14 @@ export const OTP = () => {
   };
 
   useEffect(() => {
-    const cleanup = setupNotificationHandler();
+    setupNotificationHandler();
 
     registerPushNotificationsAsync().then(token => {
       if (token) {
-        console.log('Expo token: ', token)
         setExpoToken(token)
-        // сохранить в AsyncStorage или в state менеджер
+        dispatch(setExpoPushToken(token))
       }
     });
-
-    return () => {
-      cleanup();
-    };
   }, []);
 
   useLayoutEffect(() => {
