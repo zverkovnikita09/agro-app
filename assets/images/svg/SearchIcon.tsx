@@ -6,7 +6,13 @@ export const SearchIcon = ({
   color = COLORS.blackText,
   ...props
 }: SvgProps) => (
-  <Svg fill="none" {...props} viewBox="0 0 24 24">
+  <Svg
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      fill="none"
+      {...props}
+  >
     <Path
       stroke={color}
       strokeLinecap="round"
