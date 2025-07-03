@@ -8,7 +8,8 @@ import { GilroyText } from "@shared/ui/GilroyText";
 import { Input } from "@shared/ui/Input";
 import { Title } from "@shared/ui/Title";
 import { useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Text } from "react-native";
+import * as Linking from 'expo-linking';
 
 const phoneLength = 12;
 
@@ -72,6 +73,15 @@ export const Login = () => {
       >
         Далее
       </Button>
+      <Text style={styles.policyText}>
+        Нажимая на кнопку вы соглашаетесь с
+        <Text
+          style={styles.orangeText}
+          onPress={() => Linking.openURL('https://agrozernovoz.ru/policy')}
+        >
+          &nbsp;Политикой конфиденциальности
+        </Text>
+      </Text>
     </>
   );
 };
@@ -87,4 +97,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 16,
   },
+  policyText: {
+    marginTop: 12,
+    fontSize: 12,
+    textAlign: "center"
+  },
+  orangeText: {
+    color: "#F2B430"
+  }
 });
