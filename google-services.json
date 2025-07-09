@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "328987836069",
-    "project_id": "test-react-native-app-d127d",
-    "storage_bucket": "test-react-native-app-d127d.firebasestorage.app"
+    "project_number": "771699133851",
+    "project_id": "agrologistic-6af13",
+    "storage_bucket": "agrologistic-6af13.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:328987836069:android:a98827c78a8cdfd988d74c",
+        "mobilesdk_app_id": "1:771699133851:android:6885e431b450ccc37da53e",
         "android_client_info": {
           "package_name": "com.anonymous.Agro"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAsRJC15m7I2HXmxKq6AfUTl_sOS8MSyAQ"
+          "current_key": "AIzaSyAnMguoG_aGlJ3w9HJZqThC6wlN4_KcaBk"
         }
       ],
       "services": {
