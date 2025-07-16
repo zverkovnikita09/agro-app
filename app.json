@@ -13,7 +13,6 @@
       "backgroundColor": "#F2B430"
     },
     "ios": {
-      "buildNumber": "11",
       "supportsTablet": true,
       "bundleIdentifier": "com.anonymous.Agro",
       "infoPlist": {
@@ -21,7 +20,6 @@
       }
     },
     "android": {
-      "versionCode": 11,
       "jsEngine": "hermes",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
