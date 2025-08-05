@@ -26,8 +26,7 @@
         "backgroundColor": "#F2B430"
       },
       "googleServicesFile": "./google-services.json",
-      "package": "com.anonymous.Agro",
-      "targetSdkVersion": 35
+      "package": "com.anonymous.Agro"
     },
     "plugins": [
       "expo-font",
