@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Агро логистика",
+    "name": "Агро-Логистика",
     "slug": "agroapp",
     "version": "1.1.0",
     "orientation": "portrait",
@@ -16,7 +16,8 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.anonymous.Agro",
       "infoPlist": {
-        "NSPhotoLibraryUsageDescription": "This app needs access to your photo library"
+        "NSPhotoLibraryUsageDescription": "This app needs access to your photo library",
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
