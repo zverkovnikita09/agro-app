@@ -2,7 +2,8 @@
   "expo": {
     "name": "Агро-Логистика",
     "slug": "agroapp",
-    "version": "3.0.1",
+    "scheme": "agroapp",
+    "version": "3.0.2",
     "orientation": "portrait",
     "icon": "./assets/favicon.png",
     "userInterfaceStyle": "light",
@@ -17,7 +18,8 @@
       "bundleIdentifier": "com.anonymous.Agro",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "This app needs access to your photo library",
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "UIBackgroundModes": ["remote-notification"]
       }
     },
     "android": {

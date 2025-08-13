@@ -9,7 +9,8 @@
       "distribution": "internal",
       "ios": {
         "autoIncrement": true,
-        "buildConfiguration": "Debug"
+        "buildConfiguration": "Debug",
+        "simulator": false
       }
     },
     "preview": {

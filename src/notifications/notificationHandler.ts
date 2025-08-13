@@ -3,14 +3,18 @@ import { Platform } from 'react-native';
 import * as Notifications from 'expo-notifications';
 
 export function setupNotificationHandler() {
-    Notifications.setNotificationHandler({
-        handleNotification: async () => ({
-            shouldShowBanner: true,
-            shouldShowList: true,
-            shouldPlaySound: true,
-            shouldSetBadge: true,
-        }),
-    });
+    try {
+        Notifications.setNotificationHandler({
+            handleNotification: async () => ({
+                shouldShowBanner: true,
+                shouldShowList: true,
+                shouldPlaySound: true,
+                shouldSetBadge: true,
+            }),
+        });
+    } catch (error) {
+        console.warn("Ошибка при настройке NotificationHandler:", error);
+    }
 
 
     // Настраиваем канал уведомлений на Android

@@ -99,12 +99,16 @@ export const OTP = () => {
   useEffect(() => {
     setupNotificationHandler();
 
-    registerPushNotificationsAsync().then(token => {
-      if (token) {
-        setExpoToken(token)
-        dispatch(setExpoPushToken(token))
-      }
-    });
+    const timer = setTimeout(() => {
+      registerPushNotificationsAsync().then(token => {
+        if (token) {
+          setExpoToken(token)
+          dispatch(setExpoPushToken(token))
+        }
+      });
+    }, 1500); // задержка 1.5 сек, чтобы не блокировать UI
+
+    return () => clearTimeout(timer);
   }, []);
 
   useLayoutEffect(() => {
